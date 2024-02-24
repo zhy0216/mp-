@@ -4,6 +4,7 @@
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest",
+    "@types/wechat-miniprogram": "^3.4.7",
     "compiler": "workspace:*"
   },
   "peerDependencies": {
