@@ -7,3 +7,6 @@ const compilePage = (): Page => {
   return {} as Page
 
 }
+
+
+// https://github.com/LeDDGroup/typescript-transform-jsx/tree/master
