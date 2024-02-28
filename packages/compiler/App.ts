@@ -1,15 +1,11 @@
-
 // config
 
-
-import type {Page} from "./Page.ts"
+import type { Page } from "./Page.ts";
 
 class App {
-  pages: Page[] = []
-
-
+  pages: Page[] = [];
 
   addPage(page: Page) {
-    this.pages.push(page)
+    this.pages.push(page);
   }
 }

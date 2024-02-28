@@ -2,6 +2,9 @@
   "name": "mplus2",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "lint": "bunx prettier . --write"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/wechat-miniprogram": "^3.4.7",

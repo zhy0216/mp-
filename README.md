@@ -13,7 +13,6 @@
 所以我会引入类似 [jotai](https://jotai.org/) 的状态管理库
 会有一个比较小的运行时
 
-
 下面是这个项目的目标
 
 - Next.js style router
@@ -22,7 +21,6 @@
 - similar to react mental
 - work intuitively
 - fast compile
-
 
 * [taro](https://github.com/nervjs/taro)
 * [mpx](https://github.com/didi/mpx)

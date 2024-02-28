@@ -1,5 +1,3 @@
-
-
 ### 动态 jsx 转静态 wxml 的原理
 
 - 我会用 <If> 和 <For> 来代替 wx:if 和 wx:for，这样能保证生成的 template 的结构总是一致的
@@ -67,5 +65,6 @@ const Node123 = h("Node", {
 难度有点大
 本质是做一层 [SSA form](https://en.wikipedia.org/wiki/Static_single-assignment_form) 转化
 实力有限 这里为 jsx 做两个限制
+
 1. 只能使用使用 wxml 兼容的数据绑定语法
 2. for 和 if 控制语句使用组建自带的 for 和 if

@@ -1,27 +1,26 @@
-import { isPrimitive } from './utils'
+import { isPrimitive } from "./utils";
 
-type EffectFn = () => void
-type ComputedFn<T> = () => T
+type EffectFn = () => void;
+type ComputedFn<T> = () => T;
 
 let activeEffect:
   | (EffectFn & { deps?: Set<{ value: any; deps: Set<EffectFn> }> })
-  | null = null
-let batchQueue: Set<EffectFn> = new Set()
-let effectsToRun: Set<EffectFn> = new Set()
-let inBatch = false // Add a flag to check if we are in batch
+  | null = null;
+let batchQueue: Set<EffectFn> = new Set();
+let effectsToRun: Set<EffectFn> = new Set();
+let inBatch = false; // Add a flag to check if we are in batch
 
 export interface SignalValue<T> {
-  value: T
-  peek: () => T
-  update: () => void
+  value: T;
+  peek: () => T;
+  update: () => void;
 }
 
 export interface Component {
-  queuedUpdate: () => void
-  [key: string]: any
-  _tempActiveUpdateFnName?: string
+  queuedUpdate: () => void;
+  [key: string]: any;
+  _tempActiveUpdateFnName?: string;
 }
-
 
 /**
  * Creates a signal with an initial value.
@@ -29,29 +28,29 @@ export interface Component {
  * @returns A signal object with `value` and `peek` properties.
  */
 export function signal<T>(initialValue: T): SignalValue<T> {
-  let value = initialValue
-  const deps = new Set<EffectFn>()
+  let value = initialValue;
+  const deps = new Set<EffectFn>();
 
   return new Proxy({} as SignalValue<T>, {
     get(_, prop: keyof SignalValue<T>) {
-      if (prop === 'value') {
+      if (prop === "value") {
         if (activeEffect) {
-          deps.add(activeEffect)
-          activeEffect.deps?.add({ value, deps }) // Add the dependency to the active effect
+          deps.add(activeEffect);
+          activeEffect.deps?.add({ value, deps }); // Add the dependency to the active effect
         }
-        return value
+        return value;
       }
-      if (prop === 'peek') return () => value
-      if (prop === 'update')
+      if (prop === "peek") return () => value;
+      if (prop === "update")
         return () => {
           // prevent duplicate effect execution caused by computed
           batch(() => {
-            deps.forEach((fn) => (inBatch ? effectsToRun.add(fn) : fn()))
-          })
-        }
+            deps.forEach((fn) => (inBatch ? effectsToRun.add(fn) : fn()));
+          });
+        };
     },
     set(_, prop: keyof SignalValue<T>, newValue: T) {
-      if (prop === 'value') {
+      if (prop === "value") {
         if (
           !isPrimitive(value) ||
           !isPrimitive(newValue) ||
@@ -59,15 +58,15 @@ export function signal<T>(initialValue: T): SignalValue<T> {
         ) {
           // prevent duplicate effect execution caused by computed
           batch(() => {
-            value = newValue
-            deps.forEach((fn) => (inBatch ? effectsToRun.add(fn) : fn()))
-          })
+            value = newValue;
+            deps.forEach((fn) => (inBatch ? effectsToRun.add(fn) : fn()));
+          });
         }
-        return true
+        return true;
       }
-      return false
+      return false;
     },
-  })
+  });
 }
 
 /**
@@ -76,11 +75,11 @@ export function signal<T>(initialValue: T): SignalValue<T> {
  * @returns A computed signal object.
  */
 export function computed<T>(fn: ComputedFn<T>): SignalValue<T> {
-  const computedSignal = signal<T>({} as any)
+  const computedSignal = signal<T>({} as any);
   effect(() => {
-    computedSignal.value = fn()
-  })
-  return computedSignal
+    computedSignal.value = fn();
+  });
+  return computedSignal;
 }
 
 /**
@@ -88,29 +87,29 @@ export function computed<T>(fn: ComputedFn<T>): SignalValue<T> {
  * @param fn - The function to create the effect.
  */
 export function effect(fn: EffectFn): () => void {
-  const deps = new Set<{ value: any; deps: Set<EffectFn> }>()
-  let isRunning = false // Add a flag to check if the effect function is currently running
+  const deps = new Set<{ value: any; deps: Set<EffectFn> }>();
+  let isRunning = false; // Add a flag to check if the effect function is currently running
 
   // Create a new effect function to collect dependencies and run the original function
   const effectFn = Object.assign(
     () => {
-      if (isRunning) return // If the effect function is already running, return directly
-      isRunning = true // Start running the effect function
-      activeEffect = effectFn
-      fn()
-      activeEffect = null
-      isRunning = false // Finish running the effect function
+      if (isRunning) return; // If the effect function is already running, return directly
+      isRunning = true; // Start running the effect function
+      activeEffect = effectFn;
+      fn();
+      activeEffect = null;
+      isRunning = false; // Finish running the effect function
     },
     { deps },
-  )
+  );
 
   // Run the effect function for the first time, which will collect dependencies
-  effectFn()
+  effectFn();
 
   // Return a dispose function to cancel the effect
   return () => {
-    deps.forEach((dep) => dep.deps.delete(effectFn)) // Remove the effect function from the dependencies
-  }
+    deps.forEach((dep) => dep.deps.delete(effectFn)); // Remove the effect function from the dependencies
+  };
 }
 
 /**
@@ -118,10 +117,10 @@ export function effect(fn: EffectFn): () => void {
  * @param fn - The function to batch.
  */
 export function batch(fn: EffectFn): void {
-  inBatch = true // Start batch
-  batchQueue.add(fn)
+  inBatch = true; // Start batch
+  batchQueue.add(fn);
   if (batchQueue.size === 1) {
-    runBatch()
+    runBatch();
   }
 }
 
@@ -130,30 +129,30 @@ export function batch(fn: EffectFn): void {
  */
 export function runBatch(): void {
   while (batchQueue.size) {
-    const fn = batchQueue.values().next().value
+    const fn = batchQueue.values().next().value;
     if (fn) {
-      fn()
-      batchQueue.delete(fn)
+      fn();
+      batchQueue.delete(fn);
     }
   }
 
-  effectsToRun.forEach((effectFn) => effectFn())
-  effectsToRun.clear()
-  inBatch = false // End batch
+  effectsToRun.forEach((effectFn) => effectFn());
+  effectsToRun.clear();
+  inBatch = false; // End batch
 }
 
 export type SignalObject<T> = {
-  [K in keyof T]: SignalValue<T[K]>
-}
+  [K in keyof T]: SignalValue<T[K]>;
+};
 
 export function signalObject<T>(initialValues: T): SignalObject<T> {
   const signals = Object.entries(initialValues as object).reduce(
     (acc, [key, value]) => {
-      acc[key] = signal<T[keyof T]>(value as T[keyof T])
-      return acc
+      acc[key] = signal<T[keyof T]>(value as T[keyof T]);
+      return acc;
     },
     {} as { [key: string]: SignalValue<T[keyof T]> },
-  )
+  );
 
-  return signals as SignalObject<T>
+  return signals as SignalObject<T>;
 }

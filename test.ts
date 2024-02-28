@@ -1,5 +1,5 @@
 const transpiler = new Bun.Transpiler({
-  loader: 'tsx',
+  loader: "tsx",
 });
 
 const code = `
@@ -12,10 +12,8 @@ export default function Home(props: {title: string}){
 </node>
 }`;
 
-
-console.log(transpiler.transformSync(code))
-console.log("==========================")
-console.log(transpiler.scan(code))
-console.log("==========================")
-console.log(transpiler.scanImports(code))
-
+console.log(transpiler.transformSync(code));
+console.log("==========================");
+console.log(transpiler.scan(code));
+console.log("==========================");
+console.log(transpiler.scanImports(code));

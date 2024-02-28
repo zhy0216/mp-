@@ -1,5 +1,1 @@
-
-
-export class Base {
-
-}
+export class Base {}
