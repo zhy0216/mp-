@@ -22,23 +22,6 @@ export interface Component {
   _tempActiveUpdateFnName?: string
 }
 
-let activeComponent: Component | null = null
-
-export function setActiveComponent(
-  component: Component,
-  updateFnName?: string,
-): void {
-  activeComponent = component
-  activeComponent._tempActiveUpdateFnName = updateFnName || 'queuedUpdate'
-}
-
-export function clearActiveComponent(): void {
-  activeComponent = null
-}
-
-export function getActiveComponent(): Component | null {
-  return activeComponent
-}
 
 /**
  * Creates a signal with an initial value.
@@ -57,8 +40,6 @@ export function signal<T>(initialValue: T): SignalValue<T> {
           deps.add(activeEffect)
           activeEffect.deps?.add({ value, deps }) // Add the dependency to the active effect
         }
-        const component = getActiveComponent()
-        if (component) depsComponents.add(component)
         return value
       }
       if (prop === 'peek') return () => value

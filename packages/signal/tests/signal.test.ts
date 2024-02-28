@@ -42,13 +42,6 @@ describe('Signal', () => {
     expect(testValue).toBe(30)
   })
 
-  it('should set and get active component correctly', () => {
-    const testSignal = new Signal(10)
-    const testComponent = { update: () => {} }
-    testSignal.setActiveComponent(testComponent)
-    expect(testSignal.getActiveComponent()).toBe(testComponent as any)
-  })
-
   it('should call update function and update value', () => {
     const testSignal = new Signal(10)
     let testValue = 0

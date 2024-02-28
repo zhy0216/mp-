@@ -3,8 +3,6 @@ import {
   computed,
   effect,
   batch,
-  setActiveComponent,
-  getActiveComponent,
 } from './reactivity'
 
 export class Signal<T> {
@@ -38,14 +36,6 @@ export class Signal<T> {
 
   batch(fn: () => void) {
     return batch(fn)
-  }
-
-  setActiveComponent(component: any) {
-    return setActiveComponent(component)
-  }
-
-  getActiveComponent() {
-    return getActiveComponent()
   }
 
   update(fn?: (value: T) => void) {

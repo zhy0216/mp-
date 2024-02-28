@@ -3,9 +3,6 @@ export {
   computed,
   effect,
   batch,
-  setActiveComponent,
-  clearActiveComponent,
-  getActiveComponent,
   signalObject,
 } from './reactivity'
 

@@ -1,4 +1,4 @@
-import {signal, computed, effect, batch, setActiveComponent, clearActiveComponent, type Component} from '..'
+import {signal, computed, effect, batch} from '..'
 import { describe, expect, it } from "bun:test";
 
 describe('signal', () => {
@@ -23,78 +23,6 @@ describe('computed', () => {
     expect(computedSignal.peek()).toBe(20)
     testSignal.value = 20
     expect(computedSignal.peek()).toBe(40)
-  })
-
-  it('should not dead loop', () => {
-    const todos = signal([
-      { text: 'Learn OMI', completed: true },
-    ])
-
-    const completedCount = computed(() => {
-      return todos.value.filter(todo => todo.completed)
-    })
-
-    function addTodo(text: string) {
-      todos.value.push({ text, completed: false })
-      todos.update()
-    }
-
-    const mockComponent = {
-      render() {
-        todos.value.map((todo, index) => { })
-        return completedCount.value.length
-      },
-
-      queuedUpdate() {
-        setActiveComponent(mockComponent)
-        this.render()
-        clearActiveComponent()
-      },
-    }
-
-    mockComponent.queuedUpdate()
-    addTodo("")
-    addTodo("")
-
-    expect(completedCount.value.length).toBe(1)
-    expect(todos.value.length).toBe(3)
-  })
-
-  it('should get correct value', () => {
-    const todos = signal([
-      { text: 'Learn OMI', completed: true },
-    ])
-
-    const completedCount = computed(() => {
-      return todos.value.filter(todo => todo.completed)
-    })
-
-    function addTodo(text: string) {
-      todos.value.push({ text, completed: false })
-      todos.update()
-    }
-
-    let effectTimes = 0
-    const mockComponent = {
-      render() {
-        todos.value.map((todo, index) => { })
-        return completedCount.value.length
-      },
-
-      update() {
-        effectTimes++
-      },
-
-      installed() {
-        setActiveComponent(mockComponent, 'update')
-        mockComponent.render()
-        clearActiveComponent()
-      },
-    } as unknown as Component
-
-    mockComponent.installed()
-    addTodo("")
-    expect(effectTimes).toBe(2)
   })
 
   it('should get correct value', () => {
