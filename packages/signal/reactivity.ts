@@ -31,7 +31,6 @@ export interface Component {
 export function signal<T>(initialValue: T): SignalValue<T> {
   let value = initialValue
   const deps = new Set<EffectFn>()
-  const depsComponents = new Set<Component>()
 
   return new Proxy({} as SignalValue<T>, {
     get(_, prop: keyof SignalValue<T>) {
@@ -47,11 +46,7 @@ export function signal<T>(initialValue: T): SignalValue<T> {
         return () => {
           // prevent duplicate effect execution caused by computed
           batch(() => {
-            value = value
             deps.forEach((fn) => (inBatch ? effectsToRun.add(fn) : fn()))
-            depsComponents.forEach(
-              (component) => component[component._tempActiveUpdateFnName!]?.(),
-            )
           })
         }
     },
@@ -66,9 +61,6 @@ export function signal<T>(initialValue: T): SignalValue<T> {
           batch(() => {
             value = newValue
             deps.forEach((fn) => (inBatch ? effectsToRun.add(fn) : fn()))
-            depsComponents.forEach(
-              (component) => component[component._tempActiveUpdateFnName!]?.(),
-            )
           })
         }
         return true
@@ -84,7 +76,7 @@ export function signal<T>(initialValue: T): SignalValue<T> {
  * @returns A computed signal object.
  */
 export function computed<T>(fn: ComputedFn<T>): SignalValue<T> {
-  const computedSignal = signal<T>(fn())
+  const computedSignal = signal<T>({} as any)
   effect(() => {
     computedSignal.value = fn()
   })

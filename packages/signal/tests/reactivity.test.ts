@@ -25,6 +25,27 @@ describe('computed', () => {
     expect(computedSignal.peek()).toBe(40)
   })
 
+  it('should compute the correct value with condition', () => {
+    const conditionSignal = signal(true)
+    const testSignal = signal(10)
+    let effectTime = 0
+    const computedSignal = computed(() => {
+      effectTime++
+      return conditionSignal.value ? 50 : testSignal.value * 2
+    })
+    expect(effectTime).toBe(1)
+    expect(computedSignal.peek()).toBe(50)
+    testSignal.value = 20
+    expect(effectTime).toBe(1)
+    conditionSignal.value = false
+    expect(effectTime).toBe(2)
+    expect(computedSignal.peek()).toBe(40)
+    testSignal.value = 30
+    expect(effectTime).toBe(3)
+    expect(computedSignal.peek()).toBe(60)
+
+  })
+
   it('should get correct value', () => {
     const count = signal(0)
     const double = computed(() => count.value * 2)
