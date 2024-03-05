@@ -20,5 +20,8 @@
   "dependencies": {
     "typescript": "^5.3.3"
   },
+  "exports": {
+    "./component": "./packages/components/index.ts"
+  },
   "version": "0.0.0"
 }

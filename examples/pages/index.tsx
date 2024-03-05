@@ -1,12 +1,14 @@
-import { CounterButton } from "../components/counterButton";
-import { CounterView } from "../components/counterView";
-
 export default class Index {
+  state = {
+    counter: 0
+  }
+
   render() {
     return (
       <>
-        <CounterView />
-        <CounterButton />
+        <View>{this.state.counter}</View>
+        <Button onClick={() => {}}>+</Button>
+        <Button onClick={() => {}}>-</Button>
       </>
     );
   }

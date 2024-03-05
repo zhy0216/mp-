@@ -5,7 +5,7 @@ export class Signal<T> {
   private _signal: ReturnType<typeof signal>;
 
   constructor(initialValue: T) {
-    this._value = initialValue as unknown as T;
+    this._value = initialValue;
     this._signal = signal(initialValue);
   }
 

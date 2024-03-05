@@ -75,7 +75,7 @@ export function signal<T>(initialValue: T): SignalValue<T> {
  * @returns A computed signal object.
  */
 export function computed<T>(fn: ComputedFn<T>): SignalValue<T> {
-  const computedSignal = signal<T>({} as any);
+  const computedSignal = signal<T>({} as unknown as T);
   effect(() => {
     computedSignal.value = fn();
   });
