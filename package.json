@@ -3,10 +3,10 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "prettier": "bunx @biomejs/biome format .",
+    "format": "bunx @biomejs/biome format .",
     "lint": "bunx @biomejs/biome lint .",
     "types": "bux tsc",
-    "ci": "bun types && bun run prettier && bun run lint && bun test",
+    "ci": "bun types && bun run format && bun run lint && bun test",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -31,7 +31,7 @@
     "./component": "./packages/components/index.ts"
   },
   "lint-staged": {
-    "*.ts, *.tsx": "bunx @biomejs/biome format --write"
+    "*.ts?(x)": "bunx @biomejs/biome format --write"
   },
   "version": "0.0.1"
 }
