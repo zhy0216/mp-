@@ -1,5 +1,5 @@
 const transpiler = new Bun.Transpiler({
-  loader: "tsx",
+	loader: "tsx",
 });
 
 const code = `
