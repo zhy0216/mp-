@@ -3,7 +3,10 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "prettier": "bunx @biomejs/biome format . --write"
+    "prettier": "bunx @biomejs/biome format .",
+    "lint": "bunx @biomejs/biome lint .",
+    "types": "bux tsc",
+    "ci": "bun types && bun run prettier && bun run lint && bun test"
   },
   "devDependencies": {
     "@biomejs/biome": "1.5.3",

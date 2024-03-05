@@ -34,7 +34,7 @@ export class Signal<T> {
 	}
 
 	update(fn?: (value: T) => void) {
-		fn && fn(this._value);
+		fn?.(this._value);
 		this.value = this.value;
 	}
 }

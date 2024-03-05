@@ -4,10 +4,10 @@ type EffectFn = () => void;
 type ComputedFn<T> = () => T;
 
 let activeEffect:
-	| (EffectFn & { deps?: Set<{ value: any; deps: Set<EffectFn> }> })
+	| (EffectFn & { deps?: Set<{ value: unknown; deps: Set<EffectFn> }> })
 	| null = null;
-let batchQueue: Set<EffectFn> = new Set();
-let effectsToRun: Set<EffectFn> = new Set();
+const batchQueue: Set<EffectFn> = new Set();
+const effectsToRun: Set<EffectFn> = new Set();
 let inBatch = false; // Add a flag to check if we are in batch
 
 export interface SignalValue<T> {
@@ -18,7 +18,7 @@ export interface SignalValue<T> {
 
 export interface Component {
 	queuedUpdate: () => void;
-	[key: string]: any;
+	[key: string]: unknown;
 	_tempActiveUpdateFnName?: string;
 }
 
@@ -87,7 +87,7 @@ export function computed<T>(fn: ComputedFn<T>): SignalValue<T> {
  * @param fn - The function to create the effect.
  */
 export function effect(fn: EffectFn): () => void {
-	const deps = new Set<{ value: any; deps: Set<EffectFn> }>();
+	const deps = new Set<{ value: unknown; deps: Set<EffectFn> }>();
 	let isRunning = false; // Add a flag to check if the effect function is currently running
 
 	// Create a new effect function to collect dependencies and run the original function
