@@ -1,5 +1,12 @@
 import { test, expect } from "bun:test";
-
-test("add", () => {
-	expect(2 + 2).toEqual(4);
+import {compilePage} from "../helper.ts"
+test("compile a simple page", () => {
+	const src = `
+		export default class Page {
+			render() {
+				return <View>hello, world</View>
+			}
+		}
+	`
+	expect(compilePage(src)).toMatchSnapshot();
 });

@@ -6,13 +6,16 @@
     "prettier": "bunx @biomejs/biome format .",
     "lint": "bunx @biomejs/biome lint .",
     "types": "bux tsc",
-    "ci": "bun types && bun run prettier && bun run lint && bun test"
+    "ci": "bun types && bun run prettier && bun run lint && bun test",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@biomejs/biome": "1.5.3",
     "@types/bun": "latest",
     "@types/wechat-miniprogram": "^3.4.7",
     "compiler": "workspace:*",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "ts-morph": "^21.0.1"
   },
   "peerDependencies": {
@@ -26,6 +29,9 @@
   },
   "exports": {
     "./component": "./packages/components/index.ts"
+  },
+  "lint-staged": {
+    "*.ts, *.tsx": "bunx @biomejs/biome format --write"
   },
   "version": "0.0.1"
 }
